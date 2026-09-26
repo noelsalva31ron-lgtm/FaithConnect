@@ -2,21 +2,20 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
+
+const { UPLOADS_DIR } = require("../config/storage");
 
 const router = express.Router();
 
-// =====================================
-// PROFILE PHOTO UPLOAD
-// =====================================
 
-const uploadDirectory = path.join(__dirname, "..", "uploads");
+// =====================================================
+// PHOTO UPLOAD DIRECTORY
+// =====================================================
 
-// Make sure uploads folder exists
-if (!fs.existsSync(uploadDirectory)) {
-  fs.mkdirSync(uploadDirectory, { recursive: true });
-}
-
+const uploadDirectory = UPLOADS_DIR;
+// =====================================================
+// MULTER STORAGE
+// =====================================================
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDirectory);

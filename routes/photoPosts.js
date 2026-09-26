@@ -1,7 +1,8 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
+
+const { UPLOADS_DIR } = require("../config/storage");
 
 const router = express.Router();
 
@@ -11,18 +12,9 @@ const router = express.Router();
 // =====================================================
 
 const uploadDirectory = path.join(
-  __dirname,
-  "..",
-  "uploads",
-  "photo-posts"
+    UPLOADS_DIR,
+    "photo-posts"
 );
-
-if (!fs.existsSync(uploadDirectory)) {
-  fs.mkdirSync(uploadDirectory, {
-    recursive: true
-  });
-}
-
 
 // =====================================================
 // MULTER STORAGE

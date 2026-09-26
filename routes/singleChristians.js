@@ -1,7 +1,8 @@
 const express = require("express");
 const path = require("path");
-const fs = require("fs");
 const multer = require("multer");
+
+const { UPLOADS_DIR } = require("../config/storage");
 
 const router = express.Router();
 
@@ -11,21 +12,11 @@ const router = express.Router();
 // =====================================
 
 const uploadDirectory =
-  path.join(
-    __dirname,
-    "..",
-    "uploads",
-    "single-christians"
-  );
+    path.join(
+        UPLOADS_DIR,
+        "single-christians"
+    );
 
-
-// Create folder if it does not exist
-fs.mkdirSync(
-  uploadDirectory,
-  {
-    recursive: true
-  }
-);
 
 
 // Storage settings

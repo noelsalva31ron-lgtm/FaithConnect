@@ -1,8 +1,18 @@
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const Database = require("better-sqlite3");
 const session = require("express-session");
 const multer = require("multer");
+
+const {
+    DATABASE_DIR,
+    UPLOADS_DIR
+} = require("./config/storage");
+
+// Make sure required storage directories exist
+fs.mkdirSync(DATABASE_DIR, { recursive: true });
+fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,9 +21,9 @@ const PORT = process.env.PORT || 3000;
 // =====================================
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "uploads"));
-  },
+    destination: (req, file, cb) => {
+        cb(null, UPLOADS_DIR);
+    },
 
   filename: (req, file, cb) => {
     const extension = path.extname(file.originalname);
@@ -48,9 +58,8 @@ const upload = multer({
 // =====================================
 
 const db = new Database(
-  path.join(__dirname, "database", "faithconnect.db")
+    path.join(DATABASE_DIR, "faithconnect.db")
 );
-
 db.pragma("foreign_keys = ON");
 
 // =====================================
@@ -556,7 +565,7 @@ db.exec(`
 app.use(express.static(path.join(__dirname, "public")));
 
 // Profile photos
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(UPLOADS_DIR));
 
 // =====================================
 // SERVER STATUS
