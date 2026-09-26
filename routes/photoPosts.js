@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
 const { UPLOADS_DIR } = require("../config/storage");
 
@@ -16,6 +17,7 @@ const uploadDirectory = path.join(
     "photo-posts"
 );
 
+fs.mkdirSync(uploadDirectory, { recursive: true });
 // =====================================================
 // MULTER STORAGE
 // =====================================================
