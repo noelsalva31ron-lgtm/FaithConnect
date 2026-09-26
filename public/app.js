@@ -631,258 +631,308 @@ function showAuthModal(defaultTab = "login") {
   document.body.appendChild(modal);
 
 
-  // =====================================
-  // ONE QUESTION AT A TIME
-  // =====================================
 
-  const beliefQuestions = [
+// =====================================
+// ONE QUESTION AT A TIME
+// =====================================
 
-    {
-      key: "beliefTrinity",
-      question:
-        "Do you believe in the Trinity — Father, Son, and Holy Spirit?"
-    },
+const beliefQuestions = [
 
-    {
-      key: "beliefTongues",
-      question:
-        "Do you believe in the Holy Spirit and speaking in tongues?"
-    },
+  {
+    key: "beliefTrinity",
+    question:
+      "Do you believe in the Trinity — Father, Son, and Holy Spirit?"
+  },
 
-    {
-      key: "beliefHeavenHell",
-      question:
-        "Do you believe that heaven and hell are real?"
-    },
+  {
+    key: "beliefTongues",
+    question:
+      "Do you believe in the Holy Spirit and speaking in tongues?"
+  },
 
-    {
-      key: "beliefEveryDayHoly",
-      question:
-        "Do you believe that every day is holy, rather than only one specific day?"
-    },
+  {
+    key: "beliefHeavenHell",
+    question:
+      "Do you believe that heaven and hell are real?"
+  },
 
-    {
-      key: "beliefMiracles",
-      question:
-        "Do you believe that miracles are still present today?"
-    }
+  {
+    key: "beliefEveryDayHoly",
+    question:
+      "Do you believe that every day is holy, rather than only one specific day?"
+  },
 
-  ];
-
-
-  let currentBeliefIndex = 0;
-
-
-  const beliefQuestionNumber =
-    document.getElementById(
-      "beliefQuestionNumber"
-    );
-
-
-  const beliefQuestionText =
-    document.getElementById(
-      "beliefQuestionText"
-    );
-
-
-  const beliefNextBtn =
-    document.getElementById(
-      "beliefNextBtn"
-    );
-
-
-  const createAccountBtn =
-    document.getElementById(
-      "createAccountBtn"
-    );
-
-
-  function showBeliefQuestion() {
-
-    const currentQuestion =
-      beliefQuestions[
-        currentBeliefIndex
-      ];
-
-
-    beliefQuestionNumber.textContent =
-      currentBeliefIndex + 1;
-
-
-    beliefQuestionText.textContent =
-      currentQuestion.question;
-
-
-    document
-      .querySelectorAll(
-        'input[name="currentBelief"]'
-      )
-      .forEach(input => {
-
-        input.checked = false;
-
-      });
-
-
-    if (
-      currentBeliefIndex ===
-      beliefQuestions.length - 1
-    ) {
-
-      beliefNextBtn.textContent =
-        "Finish";
-
-    } else {
-
-      beliefNextBtn.textContent =
-        "Next";
-
-    }
-
+  {
+    key: "beliefMiracles",
+    question:
+      "Do you believe that miracles are still present today?"
   }
 
-
- beliefNextBtn.addEventListener(
-  "click",
-  () => {
-
-    const selected =
-      document.querySelector(
-        'input[name="currentBelief"]:checked'
-      );
-
-    if (!selected) {
-
-      alert(
-        "Please select Yes or No before continuing."
-      );
-
-      return;
-
-    }
-
-    const currentQuestion =
-      beliefQuestions[currentBeliefIndex];
-
-    document.getElementById(
-      currentQuestion.key
-    ).value =
-      selected.value;
+];
 
 
-    // =====================================
-    // NO = RETURN TO LOGIN
-    // =====================================
+let currentBeliefIndex = 0;
 
-    if (selected.value === "no") {
 
-      const message =
-        document.getElementById(
-          "registerMessage"
-        );
+const beliefQuestionNumber =
+  document.getElementById(
+    "beliefQuestionNumber"
+  );
 
-      message.className =
-        "auth-message error";
 
-      message.textContent =
-        "Registration requires agreement with all five FaithConnect belief requirements.";
+const beliefQuestionText =
+  document.getElementById(
+    "beliefQuestionText"
+  );
 
-      setTimeout(() => {
 
-        const loginTab =
-          modal.querySelector(
-            '.auth-tab[data-tab="login"]'
+const beliefNextBtn =
+  document.getElementById(
+    "beliefNextBtn"
+  );
+
+
+const createAccountBtn =
+  document.getElementById(
+    "createAccountBtn"
+  );
+
+
+// =====================================
+// HIDE MANUAL BUTTONS
+// =====================================
+
+beliefNextBtn.style.display = "none";
+
+createAccountBtn.style.display = "none";
+
+
+// =====================================
+// SHOW CURRENT QUESTION
+// =====================================
+
+function showBeliefQuestion() {
+
+  const currentQuestion =
+    beliefQuestions[
+      currentBeliefIndex
+    ];
+
+
+  beliefQuestionNumber.textContent =
+    currentBeliefIndex + 1;
+
+
+  beliefQuestionText.textContent =
+    currentQuestion.question;
+
+
+  document
+    .querySelectorAll(
+      'input[name="currentBelief"]'
+    )
+    .forEach(input => {
+
+      input.checked = false;
+
+    });
+
+}
+
+
+// =====================================
+// HANDLE YES / NO AUTOMATICALLY
+// =====================================
+
+document
+  .querySelectorAll(
+    'input[name="currentBelief"]'
+  )
+  .forEach(input => {
+
+    input.addEventListener(
+      "change",
+      () => {
+
+        const selected =
+          document.querySelector(
+            'input[name="currentBelief"]:checked'
           );
 
-        if (loginTab) {
-          loginTab.click();
+
+        if (!selected) {
+          return;
         }
 
-        message.textContent = "";
 
-        currentBeliefIndex = 0;
-
-        showBeliefQuestion();
-
-        beliefNextBtn.style.display =
-          "block";
-
-        createAccountBtn.style.display =
-          "none";
-
-      }, 1800);
-
-      return;
-    }
+        const currentQuestion =
+          beliefQuestions[
+            currentBeliefIndex
+          ];
 
 
-    // =====================================
-    // YES = SHOW WARNING THEN CONTINUE
-    // =====================================
+        // =====================================
+        // SAVE ANSWER
+        // =====================================
 
-    const message =
-      document.getElementById(
-        "registerMessage"
-      );
-
-    message.className =
-      "auth-message success";
-
-    message.textContent =
-      "Thank you for your answer. Proceeding to the next question...";
+        document.getElementById(
+          currentQuestion.key
+        ).value =
+          selected.value;
 
 
-    currentBeliefIndex++;
+        const message =
+          document.getElementById(
+            "registerMessage"
+          );
 
 
-    // =====================================
-    // NEXT QUESTION
-    // =====================================
+        // =====================================
+        // NO = RETURN TO LOGIN
+        // =====================================
 
-    if (
-      currentBeliefIndex <
-      beliefQuestions.length
-    ) {
+        if (
+          selected.value === "no"
+        ) {
 
-      setTimeout(() => {
+          message.className =
+            "auth-message error";
 
-        message.textContent = "";
-
-        showBeliefQuestion();
-
-      }, 1000);
-
-      return;
-
-    }
+          message.textContent =
+            "Registration requires agreement with all five FaithConnect belief requirements.";
 
 
-    // =====================================
-    // ALL FIVE ANSWERS = YES
-    // =====================================
+          setTimeout(() => {
 
-    beliefNextBtn.style.display =
-      "none";
+            const loginTab =
+              modal.querySelector(
+                '.auth-tab[data-tab="login"]'
+              );
 
-    createAccountBtn.style.display =
-      "block";
 
-    beliefQuestionText.textContent =
-      "Thank you. You have completed all five belief questions.";
+            if (loginTab) {
+              loginTab.click();
+            }
 
-    beliefQuestionNumber.textContent =
-      "✓";
 
-    message.className =
-      "auth-message success";
+            message.textContent = "";
 
-    message.textContent =
-      "All five belief requirements have been completed. You may now create your account.";
 
-  }
-);
+            currentBeliefIndex = 0;
 
-  showBeliefQuestion();
+
+            document.getElementById(
+              "beliefTrinity"
+            ).value = "";
+
+            document.getElementById(
+              "beliefTongues"
+            ).value = "";
+
+            document.getElementById(
+              "beliefHeavenHell"
+            ).value = "";
+
+            document.getElementById(
+              "beliefEveryDayHoly"
+            ).value = "";
+
+            document.getElementById(
+              "beliefMiracles"
+            ).value = "";
+
+
+            showBeliefQuestion();
+
+          }, 1800);
+
+
+          return;
+
+        }
+
+
+        // =====================================
+        // YES = CONTINUE
+        // =====================================
+
+        message.className =
+          "auth-message success";
+
+        message.textContent =
+          "Thank you.";
+
+
+        currentBeliefIndex++;
+
+
+        // =====================================
+        // NEXT QUESTION
+        // =====================================
+
+        if (
+          currentBeliefIndex <
+          beliefQuestions.length
+        ) {
+
+          setTimeout(() => {
+
+            message.textContent = "";
+
+            showBeliefQuestion();
+
+          }, 300);
+
+
+          return;
+
+        }
+
+
+        // =====================================
+        // ALL FIVE ANSWERS = YES
+        // =====================================
+
+        beliefQuestionNumber.textContent =
+          "✓";
+
+
+        beliefQuestionText.textContent =
+          "Thank you. Your five belief requirements are complete.";
+
+
+        message.className =
+          "auth-message success";
+
+        message.textContent =
+          "Creating your account...";
+
+
+        // =====================================
+        // AUTOMATIC REGISTRATION
+        // =====================================
+
+        const registerForm =
+          document.getElementById(
+            "registerForm"
+          );
+
+
+        if (registerForm) {
+
+          registerForm.requestSubmit();
+
+        }
+
+      }
+    );
+
+  });
+
+
+showBeliefQuestion();
+
+
 
 
   // =====================================
