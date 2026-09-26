@@ -16,6 +16,8 @@ fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+// Railway / reverse proxy
+app.set("trust proxy", 1);
 // =====================================
 // PROFILE PHOTO UPLOAD
 // =====================================

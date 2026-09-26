@@ -179,7 +179,6 @@ router.post("/register", async (req, res) => {
 // =====================================
 // LOGIN
 // =====================================
-
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -222,16 +221,27 @@ router.post("/login", async (req, res) => {
 
     req.session.userId = user.id;
 
-    res.json({
-      success: true,
-      message: "Login successful.",
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        profile_photo: user.profile_photo,
-        bio: user.bio
+    req.session.save((err) => {
+      if (err) {
+        console.error("SESSION SAVE ERROR:", err);
+
+        return res.status(500).json({
+          success: false,
+          message: "Unable to save login session."
+        });
       }
+
+      res.json({
+        success: true,
+        message: "Login successful.",
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          profile_photo: user.profile_photo,
+          bio: user.bio
+        }
+      });
     });
 
   } catch (error) {
