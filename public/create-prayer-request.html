@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>FaithConnect - Prayer Request</title>
+
+  <link
+    rel="stylesheet"
+    href="prayer-request.css"
+  >
+</head>
+
+<body>
+
+  <header class="prayer-header">
+
+    <button
+      id="backBtn"
+      type="button"
+    >
+      ← Back
+    </button>
+
+    <h1>
+      Prayer Request
+    </h1>
+
+  </header>
+
+
+  <main class="prayer-container">
+
+    <section class="prayer-card">
+
+      <div class="prayer-icon">
+        🙏
+      </div>
+
+      <h2>
+        Share a Prayer Request
+      </h2>
+
+      <p class="subtitle">
+        Share what is on your heart and let the
+        FaithConnect community pray with you.
+      </p>
+
+
+      <label for="titleInput">
+        Prayer Request Title
+      </label>
+
+      <input
+        id="titleInput"
+        type="text"
+        maxlength="200"
+        placeholder="Example: Please pray for my family"
+      >
+
+
+      <label for="requestInput">
+        Prayer Request
+      </label>
+
+      <textarea
+        id="requestInput"
+        maxlength="5000"
+        placeholder="Write your prayer request here..."
+      ></textarea>
+
+
+      <label for="messageInput">
+        Additional Message
+        <span>(optional)</span>
+      </label>
+
+      <textarea
+        id="messageInput"
+        maxlength="5000"
+        placeholder="Add anything else you would like to share..."
+      ></textarea>
+
+
+      <div
+        id="prayerPreview"
+        class="prayer-preview"
+      >
+
+        <div class="preview-label">
+          PRAYER REQUEST
+        </div>
+
+        <div
+          id="previewTitle"
+          class="preview-title"
+        >
+          Your prayer request title
+        </div>
+
+        <div
+          id="previewRequest"
+          class="preview-request"
+        >
+          Your prayer request will appear here.
+        </div>
+
+        <div
+          id="previewMessage"
+          class="preview-message"
+        ></div>
+
+      </div>
+
+
+      <button
+        id="postPrayerBtn"
+        class="post-prayer-btn"
+        type="button"
+      >
+        🙏 Post Prayer Request
+      </button>
+
+
+      <p
+        id="statusMessage"
+        class="status-message"
+      ></p>
+
+    </section>
+
+  </main>
+
+
+  <script src="prayer-request.js"></script>
+
+</body>
+</html>
+

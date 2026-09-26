@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>FaithConnect - Photo Post</title>
+
+  <link
+    rel="stylesheet"
+    href="photo-post.css"
+  >
+
+</head>
+
+<body>
+
+  <header class="photo-header">
+
+    <button
+      id="backBtn"
+      type="button"
+    >
+      ← Back
+    </button>
+
+    <h1>Share a Photo</h1>
+
+  </header>
+
+
+  <main class="photo-container">
+
+    <section class="photo-card">
+
+      <h2>📷 Create Photo Post</h2>
+
+      <p class="subtitle">
+        Share a special moment with the FaithConnect community.
+      </p>
+
+
+      <div
+        id="photoPreview"
+        class="photo-preview"
+      >
+        <div class="photo-placeholder">
+          📷
+          <span>No photo selected</span>
+        </div>
+      </div>
+
+
+      <input
+        id="photoInput"
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        hidden
+      >
+
+
+      <button
+        id="choosePhotoBtn"
+        class="choose-photo-btn"
+        type="button"
+      >
+        📁 Choose Photo
+      </button>
+
+
+      <textarea
+        id="captionInput"
+        maxlength="5000"
+        placeholder="Write a caption...">
+      </textarea>
+
+
+      <button
+        id="postPhotoBtn"
+        class="post-photo-btn"
+        type="button"
+      >
+        📷 Post Photo
+      </button>
+
+
+      <p
+        id="statusMessage"
+        class="status-message"
+      ></p>
+
+    </section>
+
+  </main>
+
+
+  <script src="photo-post.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,266 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fb;
+  color: #222;
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.bible-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.bible-header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+#backBtn {
+  border: none;
+  background: #f0f2f5;
+  color: #333;
+  padding: 9px 15px;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+#backBtn:hover {
+  background: #e4e7eb;
+}
+
+
+/* =====================================
+   CONTAINER
+===================================== */
+
+.bible-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 0 18px;
+}
+
+
+/* =====================================
+   CARD
+===================================== */
+
+.bible-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+.bible-card h2 {
+  margin: 0 0 8px;
+  font-size: 23px;
+}
+
+.subtitle {
+  margin: 0 0 25px;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* =====================================
+   LABELS
+===================================== */
+
+.bible-card label {
+  display: block;
+  margin: 16px 0 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.bible-card label span {
+  font-weight: 400;
+  color: #9ca3af;
+}
+
+
+/* =====================================
+   INPUTS
+===================================== */
+
+.bible-card input,
+.bible-card textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 13px;
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+}
+
+.bible-card input {
+  height: 46px;
+}
+
+.bible-card textarea {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.bible-card input:focus,
+.bible-card textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+
+/* =====================================
+   VERSE PREVIEW
+===================================== */
+
+.verse-preview {
+  margin-top: 25px;
+  padding: 25px;
+  border-radius: 16px;
+  background: #faf7f0;
+  border: 1px solid #e8dfcf;
+  text-align: center;
+}
+
+.preview-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9a8060;
+  margin-bottom: 12px;
+}
+
+.preview-reference {
+  font-size: 22px;
+  font-weight: 700;
+  color: #5b4636;
+  margin-bottom: 15px;
+}
+
+.preview-text {
+  font-size: 19px;
+  line-height: 1.7;
+  color: #332b25;
+  white-space: pre-wrap;
+}
+
+.preview-message {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #e3d7c5;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #5f554c;
+  white-space: pre-wrap;
+}
+
+
+/* =====================================
+   POST BUTTON
+===================================== */
+
+.post-bible-btn {
+  width: 100%;
+  margin-top: 22px;
+  border: none;
+  background: #4f46e5;
+  color: #ffffff;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.post-bible-btn:hover {
+  background: #4338ca;
+}
+
+.post-bible-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* =====================================
+   STATUS
+===================================== */
+
+.status-message {
+  min-height: 22px;
+  margin: 15px 0 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 600px) {
+
+  .bible-header {
+    padding: 13px 15px;
+  }
+
+  .bible-header h1 {
+    font-size: 19px;
+  }
+
+  .bible-container {
+    margin: 20px auto;
+    padding: 0 12px;
+  }
+
+  .bible-card {
+    padding: 18px;
+    border-radius: 15px;
+  }
+
+  .bible-card h2 {
+    font-size: 20px;
+  }
+
+  .verse-preview {
+    padding: 20px 15px;
+  }
+
+  .preview-reference {
+    font-size: 19px;
+  }
+
+  .preview-text {
+    font-size: 17px;
+  }
+
+}
+

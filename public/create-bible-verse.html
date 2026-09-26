@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>FaithConnect - Bible Verse</title>
+
+  <link
+    rel="stylesheet"
+    href="bible-verse.css"
+  >
+
+</head>
+
+<body>
+
+  <header class="bible-header">
+
+    <button
+      id="backBtn"
+      type="button"
+    >
+      ← Back
+    </button>
+
+    <h1>
+      Share a Bible Verse
+    </h1>
+
+  </header>
+
+
+  <main class="bible-container">
+
+    <section class="bible-card">
+
+      <h2>
+        📖 Create Bible Verse Post
+      </h2>
+
+      <p class="subtitle">
+        Share God's Word with the FaithConnect community.
+      </p>
+
+
+      <!-- BOOK -->
+
+      <label for="bookInput">
+        Bible Book
+      </label>
+
+      <input
+        id="bookInput"
+        type="text"
+        maxlength="100"
+        placeholder="Example: John"
+      >
+
+
+      <!-- CHAPTER -->
+
+      <label for="chapterInput">
+        Chapter
+      </label>
+
+      <input
+        id="chapterInput"
+        type="number"
+        min="1"
+        max="150"
+        placeholder="Example: 3"
+      >
+
+
+      <!-- VERSE -->
+
+      <label for="verseInput">
+        Verse
+      </label>
+
+      <input
+        id="verseInput"
+        type="text"
+        maxlength="50"
+        placeholder="Example: 16"
+      >
+
+
+      <!-- BIBLE TEXT -->
+
+      <label for="bibleTextInput">
+        Bible Verse
+      </label>
+
+      <textarea
+        id="bibleTextInput"
+        maxlength="5000"
+        placeholder="Enter the Bible verse here..."
+      ></textarea>
+
+
+      <!-- PERSONAL MESSAGE -->
+
+      <label for="messageInput">
+        Your Message
+        <span>(optional)</span>
+      </label>
+
+      <textarea
+        id="messageInput"
+        maxlength="5000"
+        placeholder="Add a personal message or reflection..."
+      ></textarea>
+
+
+      <!-- PREVIEW -->
+
+      <div
+        id="versePreview"
+        class="verse-preview"
+      >
+
+        <div class="preview-label">
+          Bible Verse Preview
+        </div>
+
+        <div
+          id="previewReference"
+          class="preview-reference"
+        >
+          John 3:16
+        </div>
+
+        <div
+          id="previewText"
+          class="preview-text"
+        >
+          Your Bible verse will appear here.
+        </div>
+
+        <div
+          id="previewMessage"
+          class="preview-message"
+        ></div>
+
+      </div>
+
+
+      <!-- POST BUTTON -->
+
+      <button
+        id="postBibleVerseBtn"
+        class="post-bible-btn"
+        type="button"
+      >
+        📖 Post Bible Verse
+      </button>
+
+
+      <p
+        id="statusMessage"
+        class="status-message"
+      ></p>
+
+    </section>
+
+  </main>
+
+
+  <script src="bible-verse.js"></script>
+
+</body>
+
+</html>
+

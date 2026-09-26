@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>FaithConnect — Christian Community</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- =====================================
+       TOP BAR
+  ====================================== -->
+
+  <header class="topbar">
+
+    <div class="brand">
+      <span class="cross">✝</span>
+      <span>FaithConnect</span>
+    </div>
+
+    <div class="search">
+      <span>⌕</span>
+      <input
+        type="text"
+        placeholder="Search Christians, groups, churches..."
+      >
+    </div>
+
+   <div class="top-actions">
+  <button class="icon-btn" type="button">🔔</button>
+
+  <button
+    id="authButton"
+    class="avatar auth-button"
+    type="button"
+    title="Account"
+  >
+    NS
+  </button>
+</div>
+
+  </header>
+
+
+  <!-- =====================================
+       MAIN LAYOUT
+  ====================================== -->
+
+  <div class="layout">
+
+
+    <!-- =====================================
+         LEFT SIDEBAR
+    ====================================== -->
+
+    <aside class="sidebar left">
+
+      <nav>
+
+        <a class="active" href="#">
+          🏠 <span>Home</span>
+        </a>
+
+        <a href="#">
+          📖 <span>Bible</span>
+        </a>
+
+        <a href="#">
+          🙏 <span>Prayer</span>
+        </a>
+
+        <a href="#">
+          👥 <span>Groups</span>
+        </a>
+
+       <a href="#" data-section="churches">
+  ⛪ <span>Churches</span>
+</a>
+
+        <a href="#">
+          💬 <span>Messages</span>
+        </a>
+
+      </nav>
+
+
+      <div class="side-card">
+
+        <div class="side-title">
+          Your community
+        </div>
+
+        <p>
+          Connect with Christians around the world through faith,
+          prayer and fellowship.
+        </p>
+
+      </div>
+<!-- =====================================
+     LOOKING FOR GOD'S WILL
+====================================== -->
+
+<section class="card looking-gods-will-card">
+
+  <div class="section-heading">
+
+    <strong>
+      💛 Looking for God's Will?
+    </strong>
+
+  </div>
+
+  <div class="gods-will-content">
+
+    <p>
+      Connect with single Christians
+      who are seeking God's will for
+      their future.
+    </p>
+
+    <button
+      type="button"
+      id="godsWillBtn"
+      class="gods-will-btn"
+    >
+      🙏 Single Christians
+    </button>
+
+  </div>
+
+</section>
+    </aside>
+
+
+
+    <!-- =====================================
+         MAIN FEED
+    ====================================== -->
+
+    <main class="feed">
+
+
+      <!-- =====================================
+           WELCOME
+      ====================================== -->
+
+      <section class="welcome">
+
+        <div>
+
+          <div class="eyebrow">
+            WELCOME TO FAITHCONNECT
+          </div>
+
+          <h1>
+            A place to <span>connect in faith.</span>
+          </h1>
+
+          <p>
+            Share encouragement, prayer, Scripture and Christian
+            fellowship with people around the world.
+          </p>
+
+        </div>
+
+        <div class="welcome-cross">
+          ✝
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================
+           PEOPLE / USERS
+      ====================================== -->
+
+      <section class="card users-card">
+
+        <div class="section-title">
+
+          <h2>
+            People on FaithConnect
+          </h2>
+
+        </div>
+
+        <div id="usersList" class="users-list">
+
+          <p>
+            Loading people...
+          </p>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================
+           PROFILE VIEW
+      ====================================== -->
+
+      <section
+        id="profileView"
+        class="card profile-view"
+        hidden
+      >
+
+        <div class="profile-top">
+
+          <button
+            id="profileBackBtn"
+            class="profile-back-btn"
+            type="button"
+          >
+            ← Back
+          </button>
+
+        </div>
+
+
+        <div class="profile-header">
+
+
+          <!-- PROFILE AVATAR -->
+
+         <!-- PROFILE AVATAR -->
+
+<div class="profile-photo-section">
+
+  <div
+    id="profileAvatar"
+    class="profile-avatar"
+  >
+    ?
+  </div>
+
+  <input
+    id="profilePhotoInput"
+    type="file"
+    accept="image/jpeg,image/png,image/webp,image/gif"
+    hidden
+  >
+
+  <button
+    id="chooseProfilePhotoBtn"
+    class="profile-photo-btn"
+    type="button"
+  >
+    📷 Change Photo
+  </button>
+
+  <button
+    id="uploadProfilePhotoBtn"
+    class="profile-photo-btn"
+    type="button"
+    hidden
+  >
+    Upload Photo
+  </button>
+
+</div>
+
+
+          <!-- PROFILE INFORMATION -->
+
+          <div class="profile-main">
+
+            <h1 id="profileName">
+              Loading...
+            </h1>
+
+            <p id="profileBio">
+              No bio yet.
+            </p>
+
+
+            <!-- PROFILE STATS -->
+
+            <div class="profile-stats">
+
+              <div>
+                <strong id="profilePostsCount">
+                  0
+                </strong>
+
+                <span>
+                  Posts
+                </span>
+              </div>
+
+
+              <div>
+                <strong id="profileFollowersCount">
+                  0
+                </strong>
+
+                <span>
+                  Followers
+                </span>
+              </div>
+
+
+              <div>
+                <strong id="profileFollowingCount">
+                  0
+                </strong>
+
+                <span>
+                  Following
+                </span>
+              </div>
+
+            </div>
+
+
+            <!-- PROFILE FOLLOW BUTTON -->
+
+            <button
+              id="profileFollowBtn"
+              class="follow-btn"
+              type="button"
+              hidden
+            >
+              Follow
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- PROFILE POSTS -->
+
+        <div class="profile-posts">
+
+          <h2>
+            Posts
+          </h2>
+
+          <div id="profilePosts">
+
+            <p>
+              Loading posts...
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================
+           POST COMPOSER
+      ====================================== -->
+
+      <section class="composer card">
+
+        <div class="composer-row">
+
+          <div class="avatar large">
+            NS
+          </div>
+
+          <input
+            id="postInput"
+            type="text"
+            placeholder="Share something about your faith..."
+          >
+
+        </div>
+
+
+        <div class="composer-actions">
+
+          <button
+  id="photoPostBtn"
+  type="button"
+>
+  📷 Photo
+</button>
+
+       
+<button
+  id="videoPostBtn"
+  type="button"
+>
+  🎥 Video
+</button>
+
+
+
+       
+<button id="bibleVerseBtn" type="button">
+  📖 Bible Verse
+</button>
+
+
+
+         <button id="prayerRequestBtn" type="button">
+  🙏 Prayer Request
+</button>
+
+          <button
+            id="postBtn"
+            class="post-btn"
+            type="button"
+          >
+            Post
+          </button>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================
+           POSTS
+      ====================================== -->
+
+      <div id="posts">
+
+        <!-- Existing sample post.
+             app.js will replace these with
+             real database posts. -->
+
+        <article class="post card">
+
+          <div class="post-head">
+
+            <div class="avatar">
+              MS
+            </div>
+
+            <div>
+              <strong>
+                Maria Santos
+              </strong>
+
+              <small>
+                Manila, Philippines · 2h
+              </small>
+            </div>
+
+            <button
+              class="more"
+              type="button"
+            >
+              •••
+            </button>
+
+          </div>
+
+
+          <p class="post-text">
+            “Be strong and courageous. Do not be afraid;
+            do not be discouraged, for the Lord your God
+            will be with you wherever you go.”
+          </p>
+
+
+          <div class="verse">
+            Joshua 1:9
+          </div>
+
+
+          <div class="post-footer">
+
+            <button
+              class="react"
+              type="button"
+            >
+              ♡ <span>24</span> Amen
+            </button>
+
+            <button type="button">
+              💬 8 Comments
+            </button>
+
+            <button type="button">
+              ↗ Share
+            </button>
+
+          </div>
+
+        </article>
+
+
+
+        <!-- SECOND SAMPLE POST -->
+
+        <article class="post card">
+
+          <div class="post-head">
+
+            <div class="avatar green">
+              JD
+            </div>
+
+            <div>
+
+              <strong>
+                John David
+              </strong>
+
+              <small>
+                Nairobi, Kenya · 4h
+              </small>
+
+            </div>
+
+            <button
+              class="more"
+              type="button"
+            >
+              •••
+            </button>
+
+          </div>
+
+
+          <p class="post-text">
+            Please pray for my family this week.
+            We are trusting God for wisdom, peace
+            and strength.
+          </p>
+
+
+          <div class="prayer-box">
+
+            <span>
+              🙏
+            </span>
+
+            <div>
+
+              <strong>
+                Prayer Request
+              </strong>
+
+              <small>
+                Join John in prayer
+              </small>
+
+            </div>
+
+            <button type="button">
+              Pray
+            </button>
+
+          </div>
+
+
+          <div class="post-footer">
+
+            <button type="button">
+              🙏 37 Prayers
+            </button>
+
+            <button type="button">
+              💬 12 Comments
+            </button>
+
+            <button type="button">
+              ↗ Share
+            </button>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </main>
+
+
+
+    <!-- =====================================
+         RIGHT SIDEBAR
+    ====================================== -->
+
+    <aside class="sidebar right">
+
+
+      <!-- VERSE OF THE DAY -->
+
+      <section class="card verse-card">
+
+        <div class="section-label">
+          VERSE OF THE DAY
+        </div>
+
+        <div class="big-cross">
+          ✝
+        </div>
+
+        <blockquote>
+          “I can do all things through Christ
+          who strengthens me.”
+        </blockquote>
+
+        <strong>
+          Philippians 4:13
+        </strong>
+
+      </section>
+
+
+
+      <!-- CHRISTIAN COMMUNITIES -->
+
+      <section class="card">
+
+        <div class="section-heading">
+
+          <strong>
+            Christian communities
+          </strong>
+
+          <a href="#">
+            See all
+          </a>
+
+        </div>
+
+
+        <div class="community">
+
+          <span>
+            📖
+          </span>
+
+          <div>
+
+            <strong>
+              Bible Study Worldwide
+            </strong>
+
+            <small>
+              18.4K members
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="community">
+
+          <span>
+            🎵
+          </span>
+
+          <div>
+
+            <strong>
+              Worship & Praise
+            </strong>
+
+            <small>
+              12.8K members
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="community">
+
+          <span>
+            🙏
+          </span>
+
+          <div>
+
+            <strong>
+              Prayer Warriors
+            </strong>
+
+            <small>
+              9.6K members
+            </small>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </aside>
+
+  </div>
+
+
+
+  <!-- =====================================
+       MOBILE NAVIGATION
+  ====================================== -->
+
+<nav class="mobile-nav">
+
+  <a class="active" href="#" data-mobile-nav="home">
+    🏠
+    <small>Home</small>
+  </a>
+
+  <a href="#" data-mobile-nav="bible">
+    📖
+    <small>Bible</small>
+  </a>
+
+  <a href="#" data-mobile-nav="prayer">
+    🙏
+    <small>Prayer</small>
+  </a>
+
+  <a href="#" data-mobile-nav="groups">
+    👥
+    <small>Groups</small>
+  </a>
+
+  <a href="#" data-mobile-nav="singles">
+    💛
+    <small>Singles</small>
+  </a>
+
+</nav>
+
+
+  <!-- JAVASCRIPT -->
+
+  <script src="app.js"></script>
+<script src="new-feature.js"></script>
+
+</body>
+</html>

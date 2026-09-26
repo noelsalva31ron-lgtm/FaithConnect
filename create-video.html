@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+>
+
+  <title>FaithConnect - Video Post</title>
+
+  <link
+    rel="stylesheet"
+    href="video-post.css"
+  >
+
+</head>
+
+<body>
+
+  <header class="video-header">
+
+
+<button
+  id="backBtn"
+  type="button"
+>
+  ← Back
+</button>
+
+<h1>Share a Video</h1>
+
+
+  </header>
+
+  <main class="video-container">
+
+
+<section class="video-card">
+
+  <h2>🎥 Create Video Post</h2>
+
+  <p class="subtitle">
+    Share a special video with the FaithConnect community.
+  </p>
+
+
+  <div
+    id="videoPreview"
+    class="video-preview"
+  >
+
+    <div class="video-placeholder">
+
+      🎥
+
+      <span>No video selected</span>
+
+    </div>
+
+  </div>
+
+
+  <input
+    id="videoInput"
+    type="file"
+    accept="video/mp4,video/webm,video/ogg,video/quicktime"
+    hidden
+  >
+
+
+  <button
+    id="chooseVideoBtn"
+    class="choose-video-btn"
+    type="button"
+  >
+    📁 Choose Video
+  </button>
+
+
+  <textarea
+    id="captionInput"
+    maxlength="5000"
+    placeholder="Write a caption..."
+  ></textarea>
+
+
+  <button
+    id="postVideoBtn"
+    class="post-video-btn"
+    type="button"
+  >
+    🎥 Post Video
+  </button>
+
+
+  <p
+    id="statusMessage"
+    class="status-message"
+  ></p>
+
+</section>
+
+
+  </main>
+
+  <script src="video-post.js"></script>
+
+</body>
+
+</html>

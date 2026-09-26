@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>FaithConnect | Groups</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <style>
+
+    .groups-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 30px 20px 80px;
+    }
+
+    .groups-header {
+      background: linear-gradient(
+        135deg,
+        #244e45,
+        #3f7567
+      );
+
+      color: white;
+
+      border-radius: 18px;
+
+      padding: 28px;
+
+      margin-bottom: 22px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 20px;
+    }
+
+    .groups-header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    .groups-header p {
+      margin: 0;
+      color: #e4eeeb;
+    }
+
+    .create-group-btn {
+      border: 0;
+
+      background: white;
+
+      color: #315d52;
+
+      padding: 11px 18px;
+
+      border-radius: 10px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      white-space: nowrap;
+    }
+
+    .groups-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(280px, 1fr)
+        );
+
+      gap: 18px;
+    }
+
+    .group-card {
+      background: white;
+
+      border: 1px solid #e5e9ec;
+
+      border-radius: 15px;
+
+      padding: 20px;
+
+      box-shadow:
+        0 2px 8px
+        rgba(0,0,0,.04);
+    }
+
+    .group-card h3 {
+      margin: 0 0 8px;
+
+      color: #25313a;
+
+      font-size: 19px;
+    }
+
+    .group-description {
+      color: #68747d;
+
+      font-size: 14px;
+
+      line-height: 1.5;
+
+      min-height: 42px;
+    }
+
+    .group-info {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      margin-top: 16px;
+
+      padding-top: 13px;
+
+      border-top: 1px solid #edf0f1;
+
+      color: #7b8790;
+
+      font-size: 12px;
+    }
+
+    .group-action {
+      margin-top: 15px;
+
+      width: 100%;
+
+      border: 1px solid #9eb7ad;
+
+      background: white;
+
+      color: #315d52;
+
+      border-radius: 9px;
+
+      padding: 9px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+    .group-action.joined {
+      background: #315d52;
+
+      color: white;
+
+      border-color: #315d52;
+    }
+
+    .empty-groups {
+      background: white;
+
+      border: 1px solid #e5e9ec;
+
+      border-radius: 15px;
+
+      padding: 40px 20px;
+
+      text-align: center;
+
+      color: #7b8790;
+    }
+
+    .loading-groups {
+      text-align: center;
+
+      padding: 40px;
+
+      color: #7b8790;
+    }
+
+    /* CREATE GROUP MODAL */
+
+    .group-modal {
+      position: fixed;
+
+      inset: 0;
+
+      background: rgba(
+        0,
+        0,
+        0,
+        .45
+      );
+
+      display: none;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding: 20px;
+
+      z-index: 1000;
+    }
+
+    .group-modal.show {
+      display: flex;
+    }
+
+    .group-modal-box {
+      background: white;
+
+      width: 100%;
+
+      max-width: 480px;
+
+      border-radius: 16px;
+
+      padding: 24px;
+    }
+
+    .group-modal-box h2 {
+      margin-top: 0;
+
+      color: #25313a;
+    }
+
+    .group-modal-box input,
+    .group-modal-box textarea {
+      width: 100%;
+
+      border: 1px solid #dce1e4;
+
+      border-radius: 9px;
+
+      padding: 11px;
+
+      margin-bottom: 12px;
+
+      font-family: inherit;
+
+      box-sizing: border-box;
+    }
+
+    .group-modal-box textarea {
+      min-height: 100px;
+
+      resize: vertical;
+    }
+
+    .group-modal-actions {
+      display: flex;
+
+      gap: 10px;
+
+      justify-content: flex-end;
+    }
+
+    .group-modal-actions button {
+      border: 0;
+
+      border-radius: 9px;
+
+      padding: 10px 16px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+    .cancel-group-btn {
+      background: #f1f4f5;
+      color: #53606a;
+    }
+
+    .save-group-btn {
+      background: #315d52;
+      color: white;
+    }
+
+    @media (max-width: 600px) {
+
+      .groups-page {
+        padding: 15px 10px 80px;
+      }
+
+      .groups-header {
+        padding: 22px 18px;
+
+        align-items: flex-start;
+
+        flex-direction: column;
+      }
+
+      .groups-header h1 {
+        font-size: 24px;
+      }
+
+      .create-group-btn {
+        width: 100%;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="groups-page">
+
+    <div class="groups-header">
+
+      <div>
+
+        <h1>👥 Faith Groups</h1>
+
+        <p>
+          Connect, share, pray, and grow
+          together in faith.
+        </p>
+
+      </div>
+
+      <button
+        class="create-group-btn"
+        id="createGroupBtn"
+      >
+        + Create Group
+      </button>
+
+    </div>
+
+
+    <div
+      id="groupsContainer"
+      class="groups-grid"
+    >
+
+      <div class="loading-groups">
+        Loading groups...
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- CREATE GROUP MODAL -->
+
+  <div
+    class="group-modal"
+    id="groupModal"
+  >
+
+    <div class="group-modal-box">
+
+      <h2>Create a Group</h2>
+
+      <input
+        type="text"
+        id="groupName"
+        placeholder="Group name"
+      >
+
+      <textarea
+        id="groupDescription"
+        placeholder="Group description"
+      ></textarea>
+
+      <div class="group-modal-actions">
+
+        <button
+          class="cancel-group-btn"
+          id="cancelGroupBtn"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="save-group-btn"
+          id="saveGroupBtn"
+        >
+          Create Group
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    loadGroups();
+
+
+    document
+      .getElementById(
+        "createGroupBtn"
+      )
+      .addEventListener(
+        "click",
+        () => {
+
+          document
+            .getElementById(
+              "groupModal"
+            )
+            .classList
+            .add("show");
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "cancelGroupBtn"
+      )
+      .addEventListener(
+        "click",
+        closeGroupModal
+      );
+
+
+    document
+      .getElementById(
+        "saveGroupBtn"
+      )
+      .addEventListener(
+        "click",
+        createGroup
+      );
+
+  }
+);
+
+
+// =====================================
+// LOAD GROUPS
+// =====================================
+
+async function loadGroups() {
+
+  const container =
+    document.getElementById(
+      "groupsContainer"
+    );
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/groups"
+      );
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.message ||
+        "Unable to load groups."
+      );
+
+    }
+
+
+    if (
+      !data.groups ||
+      data.groups.length === 0
+    ) {
+
+      container.innerHTML = `
+        <div class="empty-groups">
+          <h3>No groups yet</h3>
+          <p>
+            Create the first FaithConnect
+            group and start building
+            your community.
+          </p>
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    container.innerHTML =
+      data.groups
+        .map(
+          (group) => {
+
+            const joined =
+              Number(
+                group.is_member
+              ) === 1;
+
+
+            return `
+
+              <div
+                class="group-card"
+              >
+
+                <h3>
+                  ${escapeHtml(
+                    group.name
+                  )}
+                </h3>
+
+                <div
+                  class="group-description"
+                >
+                  ${escapeHtml(
+                    group.description ||
+                    "No description provided."
+                  )}
+                </div>
+
+                <div
+                  class="group-info"
+                >
+
+                  <span>
+                    👥
+                    ${group.member_count}
+                    member${
+                      group.member_count == 1
+                        ? ""
+                        : "s"
+                    }
+                  </span>
+
+                  <span>
+                    By
+                    ${escapeHtml(
+                      group.creator_name
+                    )}
+                  </span>
+
+                </div>
+
+                <button
+                  class="group-action ${
+                    joined
+                      ? "joined"
+                      : ""
+                  }"
+                  onclick="
+                    toggleMembership(
+                      ${group.id},
+                      ${joined}
+                    )
+                  "
+                >
+                  ${
+                    joined
+                      ? "✓ Joined"
+                      : "Join Group"
+                  }
+                </button>
+
+              </div>
+
+            `;
+
+          }
+        )
+        .join("");
+
+  } catch (error) {
+
+    console.error(
+      "LOAD GROUPS ERROR:",
+      error
+    );
+
+    container.innerHTML = `
+      <div class="empty-groups">
+        Unable to load groups.
+        Please log in and try again.
+      </div>
+    `;
+
+  }
+
+}
+
+
+// =====================================
+// CREATE GROUP
+// =====================================
+
+async function createGroup() {
+
+  const name =
+    document
+      .getElementById(
+        "groupName"
+      )
+      .value
+      .trim();
+
+
+  const description =
+    document
+      .getElementById(
+        "groupDescription"
+      )
+      .value
+      .trim();
+
+
+  if (!name) {
+
+    alert(
+      "Please enter a group name."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/groups",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            name,
+            description
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      alert(
+        data.message ||
+        "Unable to create group."
+      );
+
+      return;
+
+    }
+
+
+    alert(
+      "Group created successfully!"
+    );
+
+
+    document
+      .getElementById(
+        "groupName"
+      )
+      .value = "";
+
+
+    document
+      .getElementById(
+        "groupDescription"
+      )
+      .value = "";
+
+
+    closeGroupModal();
+
+    loadGroups();
+
+  } catch (error) {
+
+    console.error(
+      "CREATE GROUP ERROR:",
+      error
+    );
+
+    alert(
+      "Unable to create group."
+    );
+
+  }
+
+}
+
+
+// =====================================
+// JOIN / LEAVE GROUP
+// =====================================
+
+async function toggleMembership(
+  groupId,
+  joined
+) {
+
+  const action =
+    joined
+      ? "leave"
+      : "join";
+
+
+  try {
+
+    const response =
+      await fetch(
+        `/api/groups/${groupId}/${action}`,
+        {
+          method: "POST"
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      alert(
+        data.message ||
+        "Unable to update membership."
+      );
+
+      return;
+
+    }
+
+
+    loadGroups();
+
+  } catch (error) {
+
+    console.error(
+      "GROUP MEMBERSHIP ERROR:",
+      error
+    );
+
+    alert(
+      "Unable to update group membership."
+    );
+
+  }
+
+}
+
+
+// =====================================
+// CLOSE MODAL
+// =====================================
+
+function closeGroupModal() {
+
+  document
+    .getElementById(
+      "groupModal"
+    )
+    .classList
+    .remove("show");
+
+}
+
+
+// =====================================
+// ESCAPE HTML
+// =====================================
+
+function escapeHtml(value) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.textContent =
+    value ?? "";
+
+  return div.innerHTML;
+
+}
+
+</script>
+
+</body>
+
+</html>
