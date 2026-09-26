@@ -79,6 +79,16 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    token_hash TEXT NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used INTEGER NOT NULL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+
+  );
   CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
@@ -123,6 +133,7 @@ db.exec(`
     FOREIGN KEY (following_id) REFERENCES users(id)
       ON DELETE CASCADE
   );
+  
   CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
 
@@ -565,6 +576,13 @@ db.exec(`
 // =====================================
 
 app.use(express.static(path.join(__dirname, "public")));
+
+// Password reset page
+app.get("/reset-password", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "reset-password.html")
+  );
+});
 
 // Profile photos
 app.use("/uploads", express.static(UPLOADS_DIR));

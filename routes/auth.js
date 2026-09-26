@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const path = require("path");
+const crypto = require("crypto");
 
 const { UPLOADS_DIR } = require("../config/storage");
 
@@ -70,7 +71,188 @@ function requireLogin(req, res, next) {
 
   next();
 }
+// =====================================
+// FORGOT PASSWORD
+// =====================================
+router.post("/forgot-password", (req, res) => {
+  try {
+    const email = String(req.body.email || "").trim().toLowerCase();
 
+    if (!email) {
+      return res.status(400).json({
+        message: "Please enter your email address."
+      });
+    }
+
+    const user = req.db
+      .prepare(`
+        SELECT id, email
+        FROM users
+        WHERE email = ?
+      `)
+      .get(email);
+
+    // Do not reveal whether an email exists.
+    if (!user) {
+      return res.json({
+        message: "If an account exists with that email, a password reset link has been created."
+      });
+    }
+
+    // Generate secure random token
+    const rawToken = crypto.randomBytes(32).toString("hex");
+
+    // Store only the hash
+    const tokenHash = crypto
+      .createHash("sha256")
+      .update(rawToken)
+      .digest("hex");
+
+    // Token expires after 30 minutes
+    const expiresAt = new Date(
+      Date.now() + 30 * 60 * 1000
+    ).toISOString();
+
+    // Remove old unused tokens for this user
+    req.db
+      .prepare(`
+        UPDATE password_reset_tokens
+        SET used = 1
+        WHERE user_id = ? AND used = 0
+      `)
+      .run(user.id);
+
+    // Save new token
+    req.db
+      .prepare(`
+        INSERT INTO password_reset_tokens
+        (user_id, token_hash, expires_at)
+        VALUES (?, ?, ?)
+      `)
+      .run(
+        user.id,
+        tokenHash,
+        expiresAt
+      );
+
+    // LOCALHOST TEST LINK
+    const resetLink =
+      `${req.protocol}://${req.get("host")}/reset-password?token=${rawToken}`;
+
+    console.log("PASSWORD RESET LINK:");
+    console.log(resetLink);
+
+    res.json({
+      message: "Password reset link created.",
+      resetLink
+    });
+
+  } catch (error) {
+    console.error("FORGOT PASSWORD ERROR:", error);
+
+    res.status(500).json({
+      message: "Unable to create password reset link."
+    });
+  }
+});
+
+// =====================================
+// RESET PASSWORD
+// =====================================
+router.post("/reset-password", async (req, res) => {
+  try {
+    const token = String(req.body.token || "").trim();
+    const newPassword = String(req.body.newPassword || "");
+
+    if (!token || !newPassword) {
+      return res.status(400).json({
+        message: "Invalid password reset request."
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters."
+      });
+    }
+
+    // Hash the token so we can compare it
+    // with the token stored in the database.
+    const tokenHash = crypto
+      .createHash("sha256")
+      .update(token)
+      .digest("hex");
+
+    const resetRecord = req.db
+      .prepare(`
+        SELECT id, user_id, expires_at, used
+        FROM password_reset_tokens
+        WHERE token_hash = ?
+      `)
+      .get(tokenHash);
+
+    if (!resetRecord) {
+      return res.status(400).json({
+        message: "This password reset link is invalid."
+      });
+    }
+
+    if (resetRecord.used) {
+      return res.status(400).json({
+        message: "This password reset link has already been used."
+      });
+    }
+
+    if (
+      new Date(resetRecord.expires_at).getTime() <
+      Date.now()
+    ) {
+      return res.status(400).json({
+        message: "This password reset link has expired."
+      });
+    }
+
+    // Hash the new password using bcrypt.
+    const hashedPassword =
+      await bcrypt.hash(newPassword, 12);
+
+    // Update the user's password.
+    req.db
+      .prepare(`
+        UPDATE users
+        SET password = ?
+        WHERE id = ?
+      `)
+      .run(
+        hashedPassword,
+        resetRecord.user_id
+      );
+
+    // Mark this reset token as used.
+    req.db
+      .prepare(`
+        UPDATE password_reset_tokens
+        SET used = 1
+        WHERE id = ?
+      `)
+      .run(resetRecord.id);
+
+    res.json({
+      message: "Password changed successfully."
+    });
+
+  } catch (error) {
+
+    console.error(
+      "RESET PASSWORD ERROR:",
+      error
+    );
+
+    res.status(500).json({
+      message: "Unable to reset password."
+    });
+  }
+});
 // =====================================
 // REGISTER
 // =====================================

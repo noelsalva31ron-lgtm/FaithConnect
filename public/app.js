@@ -401,47 +401,111 @@ function showAuthModal(defaultTab = "login") {
           id="loginSection"
           style="display:${defaultTab === "login" ? "block" : "none"};"
         >
+<form id="loginForm">
 
-          <form id="loginForm">
+  <label for="loginEmail">
+    Email
+  </label>
 
-            <label for="loginEmail">
-              Email
-            </label>
+  <input
+    id="loginEmail"
+    name="email"
+    type="email"
+    autocomplete="email"
+    required
+  >
 
-            <input
-              id="loginEmail"
-              name="email"
-              type="email"
-              autocomplete="email"
-              required
-            >
+  <label for="loginPassword">
+    Password
+  </label>
 
-            <label for="loginPassword">
-              Password
-            </label>
+  <input
+    id="loginPassword"
+    name="password"
+    type="password"
+    autocomplete="current-password"
+    required
+  >
 
-            <input
-              id="loginPassword"
-              name="password"
-              type="password"
-              autocomplete="current-password"
-              required
-            >
+  <div style="text-align:right; margin:8px 0 14px;">
+    <button
+      type="button"
+      id="forgotPasswordBtn"
+      style="
+        background:none;
+        border:none;
+        padding:0;
+        color:#8b5cf6;
+        cursor:pointer;
+        font-size:14px;
+      "
+    >
+      Forgot Password?
+    </button>
+  </div>
 
-            <div
-              id="loginMessage"
-              class="auth-message"
-            ></div>
+  <div
+    id="loginMessage"
+    class="auth-message"
+  ></div>
 
-            <button
-              type="submit"
-              class="auth-submit"
-            >
-              Login
-            </button>
+  <button
+    type="submit"
+    class="auth-submit"
+  >
+    Login
+  </button>
 
-          </form>
+</form>
+<div
+  id="forgotPasswordPanel"
+  style="display:none;"
+>
 
+  <h3>Forgot Password?</h3>
+
+  <p>
+    Enter the email address you used when creating your FaithConnect account.
+  </p>
+
+  <input
+    id="forgotPasswordEmail"
+    type="email"
+    placeholder="Your email address"
+    autocomplete="email"
+  >
+
+  <div
+    id="forgotPasswordMessage"
+    class="auth-message"
+  ></div>
+
+  <button
+    type="button"
+    id="forgotPasswordSubmit"
+    class="auth-submit"
+  >
+    Continue
+  </button>
+
+  <button
+    type="button"
+    id="backToLoginBtn"
+    style="
+      display:block;
+      width:100%;
+      margin-top:10px;
+      background:none;
+      border:none;
+      color:#8b5cf6;
+      cursor:pointer;
+      padding:8px;
+    "
+  >
+    ← Back to Login
+  </button>
+
+</div>
         </div>
 
 
@@ -1028,8 +1092,146 @@ showBeliefQuestion();
       "submit",
       handleLogin
     );
+// =====================================
+// FORGOT PASSWORD SCREEN
+// =====================================
 
+const forgotPasswordBtn = modal.querySelector("#forgotPasswordBtn");
+const forgotPasswordPanel = modal.querySelector("#forgotPasswordPanel");
+const loginForm = modal.querySelector("#loginForm");
+const backToLoginBtn = modal.querySelector("#backToLoginBtn");
 
+if (forgotPasswordBtn) {
+  forgotPasswordBtn.addEventListener("click", () => {
+
+    loginForm.style.display = "none";
+    forgotPasswordPanel.style.display = "block";
+
+    const emailInput = modal.querySelector("#forgotPasswordEmail");
+
+    if (emailInput) {
+      emailInput.focus();
+    }
+  });
+}
+
+if (backToLoginBtn) {
+  backToLoginBtn.addEventListener("click", () => {
+
+    forgotPasswordPanel.style.display = "none";
+    loginForm.style.display = "block";
+
+    const message = modal.querySelector("#forgotPasswordMessage");
+
+    if (message) {
+      message.textContent = "";
+      message.className = "auth-message";
+    }
+  });
+}
+// =====================================
+// FORGOT PASSWORD REQUEST
+// =====================================
+
+const forgotPasswordSubmit =
+  modal.querySelector("#forgotPasswordSubmit");
+
+if (forgotPasswordSubmit) {
+  forgotPasswordSubmit.addEventListener("click", async () => {
+
+    const emailInput =
+      modal.querySelector("#forgotPasswordEmail");
+
+    const message =
+      modal.querySelector("#forgotPasswordMessage");
+
+    const email =
+      emailInput.value.trim();
+
+    if (!email) {
+      message.className = "auth-message error";
+      message.textContent =
+        "Please enter your email address.";
+      return;
+    }
+
+    forgotPasswordSubmit.disabled = true;
+    forgotPasswordSubmit.textContent = "Checking...";
+
+    message.className = "auth-message info";
+    message.textContent =
+      "Creating password reset link...";
+
+    try {
+
+      const response = await fetch(
+        "/api/auth/forgot-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        message.className = "auth-message error";
+        message.textContent =
+          data.message ||
+          "Unable to create reset link.";
+
+        forgotPasswordSubmit.disabled = false;
+        forgotPasswordSubmit.textContent = "Continue";
+        return;
+      }
+
+      message.className = "auth-message success";
+
+      message.innerHTML = `
+        <div>
+          ${data.message}
+        </div>
+
+        ${
+          data.resetLink
+            ? `
+              <div style="margin-top:12px;">
+                <a
+                  href="${data.resetLink}"
+                  style="color:#8b5cf6;font-weight:bold;"
+                >
+                  Open Password Reset Page
+                </a>
+              </div>
+            `
+            : ""
+        }
+      `;
+
+      forgotPasswordSubmit.disabled = false;
+      forgotPasswordSubmit.textContent = "Continue";
+
+    } catch (error) {
+
+      console.error(
+        "FORGOT PASSWORD ERROR:",
+        error
+      );
+
+      message.className = "auth-message error";
+      message.textContent =
+        "Unable to connect to the server.";
+
+      forgotPasswordSubmit.disabled = false;
+      forgotPasswordSubmit.textContent = "Continue";
+    }
+  });
+}
   // =====================================
   // REGISTER
   // =====================================
