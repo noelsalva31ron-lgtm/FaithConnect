@@ -1817,3 +1817,92 @@ footer {
 .single-profile-edit-btn:active {
   transform: translateY(0);
 }
+
+/* FOLLOWERS / FOLLOWING MODAL */
+
+.profile-stat-clickable {
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.profile-stat-clickable:hover {
+  opacity: 0.75;
+}
+
+.follow-list-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.follow-list-content {
+  background: #fff;
+  width: 100%;
+  max-width: 450px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.follow-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.follow-list-header h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.follow-list-close {
+  border: 0;
+  background: transparent;
+  font-size: 30px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.follow-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.follow-list-item img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.follow-list-item-name {
+  font-weight: 600;
+}
+
+.follow-list-item-bio {
+  font-size: 13px;
+  color: #666;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+  .follow-list-content {
+    padding: 16px;
+    max-height: 85vh;
+  }
+}

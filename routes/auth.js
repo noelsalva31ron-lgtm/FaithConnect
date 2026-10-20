@@ -762,6 +762,131 @@ router.get("/users/:id", requireLogin, (req, res) => {
   }
 });
 
+/* =====================================
+   GET A USER'S FOLLOWERS
+===================================== */
+
+router.get("/users/:id/followers", requireLogin, (req, res) => {
+  try {
+    const userId = Number(req.params.id);
+
+    if (!Number.isSafeInteger(userId) || userId <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID."
+      });
+    }
+
+    const userExists = req.db
+      .prepare("SELECT id FROM users WHERE id = ?")
+      .get(userId);
+
+    if (!userExists) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found."
+      });
+    }
+
+    const users = req.db
+      .prepare(`
+        SELECT
+          users.id,
+          users.name,
+          users.profile_photo,
+          users.bio,
+          EXISTS (
+            SELECT 1
+            FROM follows AS mine
+            WHERE mine.follower_id = ?
+              AND mine.following_id = users.id
+          ) AS is_following
+        FROM follows
+        JOIN users
+          ON users.id = follows.follower_id
+        WHERE follows.following_id = ?
+        ORDER BY users.name COLLATE NOCASE ASC
+      `)
+      .all(req.session.userId, userId);
+
+    res.json({
+      success: true,
+      users
+    });
+
+  } catch (error) {
+    console.error("GET FOLLOWERS ERROR:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Unable to load followers."
+    });
+  }
+});
+
+
+/* =====================================
+   GET USERS A PERSON IS FOLLOWING
+===================================== */
+
+router.get("/users/:id/following", requireLogin, (req, res) => {
+  try {
+    const userId = Number(req.params.id);
+
+    if (!Number.isSafeInteger(userId) || userId <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID."
+      });
+    }
+
+    const userExists = req.db
+      .prepare("SELECT id FROM users WHERE id = ?")
+      .get(userId);
+
+    if (!userExists) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found."
+      });
+    }
+
+    const users = req.db
+      .prepare(`
+        SELECT
+          users.id,
+          users.name,
+          users.profile_photo,
+          users.bio,
+          EXISTS (
+            SELECT 1
+            FROM follows AS mine
+            WHERE mine.follower_id = ?
+              AND mine.following_id = users.id
+          ) AS is_following
+        FROM follows
+        JOIN users
+          ON users.id = follows.following_id
+        WHERE follows.follower_id = ?
+        ORDER BY users.name COLLATE NOCASE ASC
+      `)
+      .all(req.session.userId, userId);
+
+    res.json({
+      success: true,
+      users
+    });
+
+  } catch (error) {
+    console.error("GET FOLLOWING ERROR:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Unable to load following list."
+    });
+  }
+});
+
 // =====================================
 // FOLLOW USER
 // =====================================

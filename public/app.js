@@ -4066,6 +4066,150 @@ async function loadUserProfile(
 }
 
 
+/* =====================================
+   FOLLOWERS / FOLLOWING LIST
+===================================== */
+
+async function openFollowList(type) {
+  const modal = document.getElementById("followListModal");
+  const title = document.getElementById("followListTitle");
+  const body = document.getElementById("followListBody");
+  const profileView = document.getElementById("profileView");
+
+  if (!modal || !title || !body || !profileView) {
+    console.error("Follow list modal elements are missing.");
+    return;
+  }
+
+  const profileUserId = profileView.dataset.userId;
+
+  if (!profileUserId) {
+    alert("Please open a profile first.");
+    return;
+  }
+
+  if (type !== "followers" && type !== "following") {
+    return;
+  }
+
+  title.textContent =
+    type === "followers" ? "Followers" : "Following";
+
+  body.innerHTML = "<p>Loading...</p>";
+  modal.style.display = "flex";
+
+  try {
+    const response = await fetch(
+      `/api/auth/users/${encodeURIComponent(profileUserId)}/${type}`
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      body.innerHTML = "";
+      const message = document.createElement("p");
+      message.textContent = data.message || "Unable to load this list.";
+      body.appendChild(message);
+      return;
+    }
+
+    body.innerHTML = "";
+
+    if (!Array.isArray(data.users) || data.users.length === 0) {
+      const emptyMessage = document.createElement("p");
+      emptyMessage.textContent =
+        type === "followers"
+          ? "This user has no followers yet."
+          : "This user is not following anyone yet.";
+
+      body.appendChild(emptyMessage);
+      return;
+    }
+
+    data.users.forEach(user => {
+      const item = document.createElement("div");
+      item.className = "follow-list-item";
+      item.tabIndex = 0;
+      item.setAttribute("role", "button");
+
+      const avatar = document.createElement("img");
+      avatar.alt = "";
+      avatar.src = user.profile_photo || "";
+      avatar.onerror = () => {
+        avatar.style.display = "none";
+      };
+
+      const details = document.createElement("div");
+
+      const name = document.createElement("div");
+      name.className = "follow-list-item-name";
+      name.textContent = user.name || "FaithConnect member";
+
+      const bio = document.createElement("div");
+      bio.className = "follow-list-item-bio";
+      bio.textContent = user.bio || "";
+
+      details.appendChild(name);
+      details.appendChild(bio);
+      item.appendChild(avatar);
+      item.appendChild(details);
+
+      const openProfile = () => {
+        modal.style.display = "none";
+        loadUserProfile(user.id);
+      };
+
+      item.addEventListener("click", openProfile);
+
+      item.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openProfile();
+        }
+      });
+
+      body.appendChild(item);
+    });
+
+  } catch (error) {
+    console.error("FOLLOW LIST ERROR:", error);
+    body.innerHTML = "<p>Unable to connect to the server.</p>";
+  }
+}
+
+
+/* =====================================
+   CLOSE FOLLOWERS / FOLLOWING LIST
+===================================== */
+
+function closeFollowList() {
+  const modal = document.getElementById("followListModal");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
+
+
+/* Close the popup when clicking its backdrop */
+
+document.addEventListener("click", event => {
+  const modal = document.getElementById("followListModal");
+
+  if (modal && event.target === modal) {
+    closeFollowList();
+  }
+});
+
+
+/* Close the popup with Escape */
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeFollowList();
+  }
+});
+
 // =====================================
 // CLICK USER CARD
 // =====================================

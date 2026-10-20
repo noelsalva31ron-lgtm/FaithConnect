@@ -280,41 +280,49 @@
             </p>
 
 
-            <!-- PROFILE STATS -->
+           
+<!-- PROFILE STATS -->
 
-            <div class="profile-stats">
+<div class="profile-stats">
 
-              <div>
-                <strong id="profilePostsCount">
-                  0
-                </strong>
+  <div>
+    <strong id="profilePostsCount">0</strong>
+    <span>Posts</span>
+  </div>
 
-                <span>
-                  Posts
-                </span>
-              </div>
+  <div class="profile-stat-clickable"
+       role="button"
+       tabindex="0"
+       onclick="openFollowList('followers')"
+       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFollowList('followers')}">
+    <strong id="profileFollowersCount">0</strong>
+    <span>Followers</span>
+  </div>
+
+  <div class="profile-stat-clickable"
+       role="button"
+       tabindex="0"
+       onclick="openFollowList('following')"
+       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFollowList('following')}">
+    <strong id="profileFollowingCount">0</strong>
+    <span>Following</span>
+  </div>
+
+</div>
 
 
-              <div>
-                <strong id="profileFollowersCount">
-                  0
-                </strong>
 
-                <span>
-                  Followers
-                </span>
-              </div>
+              
+<div class="profile-stat-clickable"
+     role="button"
+     tabindex="0"
+     onclick="openFollowList('following')"
+     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFollowList('following')}">
 
+  <strong id="profileFollowingCount">0</strong>
 
-              <div>
-                <strong id="profileFollowingCount">
-                  0
-                </strong>
-
-                <span>
-                  Following
-                </span>
-              </div>
+  <span>Following</span>
+</div>
 
             </div>
 
@@ -741,6 +749,35 @@
 </nav>
 
 
+
+<!-- FOLLOWERS / FOLLOWING MODAL -->
+
+<div id="followListModal"
+     class="follow-list-modal"
+     style="display:none;"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="followListTitle">
+
+  <div class="follow-list-content">
+
+    <div class="follow-list-header">
+      <h2 id="followListTitle">Followers</h2>
+
+      <button type="button"
+              class="follow-list-close"
+              onclick="closeFollowList()"
+              aria-label="Close">
+        &times;
+      </button>
+    </div>
+
+    <div id="followListBody">
+      <p>Loading...</p>
+    </div>
+
+  </div>
+</div>
 
   <!-- JAVASCRIPT -->
 

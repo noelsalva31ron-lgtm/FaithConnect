@@ -5891,3 +5891,38 @@ document.addEventListener(
 
   }
 );
+
+/* =====================================
+   MOBILE MESSAGES NAVIGATION FIX
+   ===================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const mobileMessagesLink = document.querySelector(
+        '.mobile-nav a[data-mobile-nav="messages"]'
+    );
+
+    if (!mobileMessagesLink) {
+        console.warn("FaithConnect: Mobile Messages button not found.");
+        return;
+    }
+
+    mobileMessagesLink.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        if (typeof openMessages === "function") {
+            openMessages();
+
+            // Highlight Messages in the mobile navigation.
+            document.querySelectorAll(".mobile-nav a").forEach(function (link) {
+                link.classList.remove("active");
+            });
+
+            mobileMessagesLink.classList.add("active");
+        } else {
+            console.error(
+                "FaithConnect: openMessages() is not available."
+            );
+            alert("Messages could not be opened. Please refresh the page and try again.");
+        }
+    });
+});
