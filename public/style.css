@@ -1906,3 +1906,58 @@ footer {
     max-height: 85vh;
   }
 }
+
+/* POST THREE-DOT OPTIONS MENU */
+.post-options {
+  position: relative;
+  margin-left: auto;
+}
+
+.post-options .more {
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.post-options .more:hover {
+  background: #f1f4f5;
+}
+
+.post-options-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 150px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #e5e9ec;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 30;
+}
+
+.post-options-menu[hidden] {
+  display: none !important;
+}
+
+.post-options-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #25313a;
+  text-align: left;
+  cursor: pointer;
+}
+
+.post-options-menu button:hover {
+  background: #f1f4f5;
+}
+
+.post-options-menu .delete-post-btn {
+  color: #c62828;
+}

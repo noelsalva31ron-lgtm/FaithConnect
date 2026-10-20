@@ -1550,18 +1550,26 @@ async function logoutUser() {
       );
 
 
+   
     if (authButton) {
 
-      authButton.textContent =
-        "NS";
+      authButton.textContent = "JESUS";
 
-      authButton.classList.remove(
-        "logged-in"
-      );
+      authButton.classList.remove("logged-in");
 
       delete authButton.dataset.userId;
 
+      authButton.style.display = "";
+      authButton.style.visibility = "visible";
+      authButton.style.opacity = "1";
+      authButton.disabled = false;
+
+      authButton.onclick = () => {
+        showAuthModal("login");
+      };
+
     }
+
 
 
     const profileView =
@@ -2062,6 +2070,17 @@ function createPostElement(post) {
     );
 
 
+  const authButton =
+    document.getElementById("authButton");
+
+  const currentUserId =
+    authButton?.dataset.userId;
+
+  const isOwnPost =
+    currentUserId &&
+    Number(post.user_id) ===
+      Number(currentUserId);
+
   // =====================================
   // POST CONTENT
   // =====================================
@@ -2277,13 +2296,41 @@ function createPostElement(post) {
       </div>
 
 
+      
+${isOwnPost ? `
+  <div class="post-options">
+    <button
+      class="more"
+      type="button"
+      aria-label="More options"
+      aria-expanded="false"
+      data-post-id="${post.id}"
+    >
+      •••
+    </button>
+
+    <div class="post-options-menu" hidden>
+      ${post.post_type === "text" ? `
+        <button
+          class="edit-post-btn"
+          type="button"
+          data-post-id="${post.id}"
+        >
+          Edit Post
+        </button>
+      ` : ""}
+
       <button
-        class="more"
+        class="delete-post-btn"
         type="button"
-        aria-label="More options"
+        data-post-id="${post.id}"
       >
-        •••
+        Delete Post
       </button>
+    </div>
+  </div>
+` : ""}
+
 
     </div>
 
@@ -2779,6 +2826,223 @@ async function loadComments(
 // =====================================
 
 document.addEventListener("click", async event => {
+
+  // POST OPTIONS MENU
+  const moreButton = event.target.closest(".more");
+
+  if (moreButton) {
+    const postElement = moreButton.closest(".post");
+    const menu = postElement?.querySelector(
+      ".post-options-menu"
+    );
+
+    if (!menu) return;
+
+    const willOpen = menu.hidden;
+
+    // Close other open post menus
+    document.querySelectorAll(
+      ".post-options-menu"
+    ).forEach(openMenu => {
+      openMenu.hidden = true;
+
+      const button = openMenu
+        .closest(".post-options")
+        ?.querySelector(".more");
+
+      button?.setAttribute("aria-expanded", "false");
+    });
+
+    // Toggle the clicked menu
+    menu.hidden = !willOpen;
+    moreButton.setAttribute(
+      "aria-expanded",
+      String(willOpen)
+    );
+
+    return;
+  }
+
+  // Close menus when clicking outside them
+  if (!event.target.closest(".post-options")) {
+    document.querySelectorAll(
+      ".post-options-menu"
+    ).forEach(menu => {
+      menu.hidden = true;
+
+      menu.closest(".post-options")
+        ?.querySelector(".more")
+        ?.setAttribute("aria-expanded", "false");
+    });
+  }
+
+
+  // EDIT POST
+  const editPostButton =
+    event.target.closest(".edit-post-btn");
+
+  if (editPostButton) {
+    const postId = editPostButton.dataset.postId;
+    const postElement = editPostButton.closest(".post");
+
+    if (!postId || !postElement) return;
+
+    const postText = postElement.querySelector(".post-text");
+
+    if (!postText) {
+      alert("Unable to find the post text.");
+      return;
+    }
+
+    const originalContent = postText.textContent.trim();
+
+    const updatedContent = prompt(
+      "Edit your post:",
+      originalContent
+    );
+
+    // Cancelled by the user
+    if (updatedContent === null) return;
+
+    const content = updatedContent.trim();
+
+    if (!content) {
+      alert("Post cannot be empty.");
+      return;
+    }
+
+    if (content.length > 5000) {
+      alert("Post cannot exceed 5000 characters.");
+      return;
+    }
+
+    if (content === originalContent) return;
+
+    try {
+      editPostButton.disabled = true;
+      editPostButton.textContent = "Saving...";
+
+      const response = await fetch(
+        `/api/posts/${postId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({ content })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.message || "Unable to update post."
+        );
+      }
+
+      // Reload the feed so the saved content is displayed
+      const menu = postElement.querySelector(
+        ".post-options-menu"
+      );
+
+      if (menu) menu.hidden = true;
+
+      await loadPosts();
+
+      alert("Post updated successfully!");
+
+    } catch (error) {
+      console.error("EDIT POST ERROR:", error);
+
+      alert(
+        error.message || "Unable to update post."
+      );
+
+    } finally {
+      editPostButton.disabled = false;
+      editPostButton.textContent = "Edit Post";
+    }
+
+    return;
+  }
+
+
+  // DELETE POST
+  const deletePostButton =
+    event.target.closest(".delete-post-btn");
+
+  if (deletePostButton) {
+    const postId = deletePostButton.dataset.postId;
+
+    if (!postId) return;
+
+    const confirmed = confirm(
+      "Are you sure you want to delete this post? This action cannot be undone."
+    );
+
+    if (!confirmed) return;
+
+    try {
+      deletePostButton.disabled = true;
+      deletePostButton.textContent = "Deleting...";
+
+      const response = await fetch(
+        `/api/posts/${postId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Accept": "application/json"
+          }
+        }
+      );
+
+     
+const responseText = await response.text();
+
+let data;
+
+try {
+  data = JSON.parse(responseText);
+} catch (parseError) {
+  console.error(
+    "EDIT POST RESPONSE IS NOT JSON:",
+    response.status,
+    responseText.slice(0, 1000)
+  );
+
+  throw new Error(
+    `Server returned an unexpected response (HTTP ${response.status}). Check the browser console.`
+  );
+}
+
+if (!response.ok || !data.success) {
+  throw new Error(
+    data.message || "Unable to update post."
+  );
+}
+
+
+      const postElement =
+        deletePostButton.closest(".post");
+
+      postElement?.remove();
+
+    } catch (error) {
+      console.error("DELETE POST ERROR:", error);
+
+      alert(
+        error.message || "Unable to delete post."
+      );
+
+      deletePostButton.disabled = false;
+      deletePostButton.textContent = "Delete Post";
+    }
+
+    return;
+  }
+
 
   // =================================
   // AMEN
@@ -3447,6 +3711,31 @@ function sharePost(postId) {
     );
 
 }
+
+
+function togglePeopleList() {
+
+  const usersList = document.getElementById("usersList");
+  const toggleButton = document.getElementById("togglePeopleBtn");
+
+  if (!usersList || !toggleButton) {
+    return;
+  }
+
+  const isClosed = usersList.style.display === "none";
+
+  if (isClosed) {
+    usersList.style.display = "";
+    toggleButton.textContent = "✖ Hide People";
+    toggleButton.setAttribute("aria-expanded", "true");
+  } else {
+    usersList.style.display = "none";
+    toggleButton.textContent = "👥 Show People";
+    toggleButton.setAttribute("aria-expanded", "false");
+  }
+
+}
+
 // =====================================
 // USERS / FOLLOW SYSTEM
 // =====================================

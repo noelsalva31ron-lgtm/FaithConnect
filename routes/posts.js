@@ -447,6 +447,88 @@ router.delete("/comments/:commentId", requireLogin, (req, res) => {
 });
 
 
+ // =====================================
+ // EDIT TEXT POST
+ // =====================================
+
+router.put("/:id", requireLogin, (req, res) => {
+  try {
+    const postId = Number(req.params.id);
+    const content = String(req.body.content || "").trim();
+
+    if (!Number.isInteger(postId) || postId <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid post ID."
+      });
+    }
+
+    if (!content) {
+      return res.status(400).json({
+        success: false,
+        message: "Post cannot be empty."
+      });
+    }
+
+    if (content.length > 5000) {
+      return res.status(400).json({
+        success: false,
+        message: "Post is too long. Maximum 5000 characters."
+      });
+    }
+
+    const post = req.db
+      .prepare(`
+        SELECT user_id, post_type
+        FROM posts
+        WHERE id = ?
+      `)
+      .get(postId);
+
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found."
+      });
+    }
+
+    if (Number(post.user_id) !== Number(req.session.userId)) {
+      return res.status(403).json({
+        success: false,
+        message: "You can only edit your own posts."
+      });
+    }
+
+    if (post.post_type !== "text") {
+      return res.status(400).json({
+        success: false,
+        message: "Only regular text posts can be edited."
+      });
+    }
+
+    req.db
+      .prepare(`
+        UPDATE posts
+        SET content = ?
+        WHERE id = ? AND user_id = ?
+      `)
+      .run(content, postId, req.session.userId);
+
+    return res.json({
+      success: true,
+      message: "Post updated successfully."
+    });
+
+  } catch (error) {
+    console.error("EDIT POST ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to edit post."
+    });
+  }
+});
+
 // =====================================
 // DELETE POST
 // =====================================
